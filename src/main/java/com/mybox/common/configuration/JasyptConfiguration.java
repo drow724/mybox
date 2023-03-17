@@ -1,4 +1,4 @@
-package com.mybox.configuration;
+package com.mybox.common.configuration;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
