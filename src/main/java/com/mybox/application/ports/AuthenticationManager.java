@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @AllArgsConstructor
-public class AuthenticationService implements ReactiveAuthenticationManager {
+public class AuthenticationManager implements ReactiveAuthenticationManager {
 
 	private final JwtUtil jwtUtil;
 

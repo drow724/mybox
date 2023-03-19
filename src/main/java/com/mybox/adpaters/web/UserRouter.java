@@ -14,8 +14,8 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class UserRouter {
 
-//	@Bean
-//	public RouterFunction<ServerResponse> routes(UserHandler handler) {
-//		return route(POST("/login").and(accept(MediaType.APPLICATION_JSON)), handler::login);
-//	}
+	@Bean
+	public RouterFunction<ServerResponse> routes(UserHandler handler) {
+		return route(POST("/join").and(accept(MediaType.APPLICATION_JSON)), handler::join);
+	}
 }
