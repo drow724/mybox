@@ -1,10 +1,10 @@
-package com.mybox.security.adpaters.persistance.entity;
+package com.mybox.adpaters.persistance.entity;
 
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.mybox.security.application.domain.Role;
+import com.mybox.application.domain.constant.Role;
 
 import lombok.Getter;
 

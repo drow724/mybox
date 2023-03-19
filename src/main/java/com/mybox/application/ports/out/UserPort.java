@@ -1,4 +1,4 @@
-package com.mybox.security.application.ports.out;
+package com.mybox.application.ports.out;
 
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 

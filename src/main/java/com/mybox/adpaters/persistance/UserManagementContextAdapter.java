@@ -1,4 +1,4 @@
-package com.mybox.security.adpaters.persistance;
+package com.mybox.adpaters.persistance;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
-import com.mybox.security.application.ports.out.UserPort;
+import com.mybox.application.ports.out.UserPort;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

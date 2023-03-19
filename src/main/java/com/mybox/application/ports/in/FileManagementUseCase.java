@@ -1,6 +1,6 @@
-package com.mybox.fileSystem.application.ports.in;
+package com.mybox.application.ports.in;
 
-import com.mybox.fileSystem.application.domain.File;
+import com.mybox.application.domain.File;
 
 import reactor.core.publisher.Mono;
 

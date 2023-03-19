@@ -1,4 +1,4 @@
-package com.mybox.security.application.domain;
+package com.mybox.application.domain;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mybox.application.domain.constant.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

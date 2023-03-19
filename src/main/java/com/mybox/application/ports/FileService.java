@@ -1,10 +1,10 @@
-package com.mybox.fileSystem.application.ports;
+package com.mybox.application.ports;
 
 import org.springframework.stereotype.Service;
 
-import com.mybox.fileSystem.application.domain.File;
-import com.mybox.fileSystem.application.ports.in.FileManagementUseCase;
-import com.mybox.fileSystem.application.ports.out.FilePort;
+import com.mybox.application.domain.File;
+import com.mybox.application.ports.in.FileManagementUseCase;
+import com.mybox.application.ports.out.FilePort;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

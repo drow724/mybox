@@ -1,4 +1,4 @@
-package com.mybox.security.application.domain;
+package com.mybox.application.domain.constant;
 
 public enum Role {
 

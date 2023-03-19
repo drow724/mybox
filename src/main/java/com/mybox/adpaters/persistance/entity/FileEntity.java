@@ -1,9 +1,9 @@
-package com.mybox.fileSystem.adpaters.persistance.entity;
+package com.mybox.adpaters.persistance.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.mybox.fileSystem.application.domain.File;
+import com.mybox.application.domain.File;
 
 import lombok.Getter;
 

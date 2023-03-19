@@ -1,4 +1,4 @@
-package com.mybox.fileSystem.adpaters.web;
+package com.mybox.adpaters.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

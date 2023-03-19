@@ -1,6 +1,6 @@
-package com.mybox.fileSystem.adpaters.web.presenter;
+package com.mybox.adpaters.web.presenter;
 
-import com.mybox.fileSystem.application.domain.File;
+import com.mybox.application.domain.File;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

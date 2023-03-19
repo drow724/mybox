@@ -1,11 +1,11 @@
-package com.mybox.fileSystem.adpaters.persistance;
+package com.mybox.adpaters.persistance;
 
 import org.springframework.stereotype.Component;
 
-import com.mybox.fileSystem.adpaters.persistance.entity.FileEntity;
-import com.mybox.fileSystem.adpaters.persistance.repository.FileRepository;
-import com.mybox.fileSystem.application.domain.File;
-import com.mybox.fileSystem.application.ports.out.FilePort;
+import com.mybox.adpaters.persistance.entity.FileEntity;
+import com.mybox.adpaters.persistance.repository.FileRepository;
+import com.mybox.application.domain.File;
+import com.mybox.application.ports.out.FilePort;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

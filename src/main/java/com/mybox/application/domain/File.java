@@ -1,4 +1,4 @@
-package com.mybox.fileSystem.application.domain;
+package com.mybox.application.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

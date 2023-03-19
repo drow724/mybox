@@ -1,4 +1,4 @@
-package com.mybox.security.application.ports;
+package com.mybox.application.ports;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class AuthenticationService implements ReactiveAuthenticationManager {
 
-	private JWTUtil jwtUtil;
+	private final JwtUtil jwtUtil;
 
 	@Override
 	@SuppressWarnings("unchecked")

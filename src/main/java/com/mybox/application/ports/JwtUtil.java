@@ -1,4 +1,4 @@
-package com.mybox.security.application.ports;
+package com.mybox.application.ports;
 
 import java.security.Key;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.mybox.security.application.domain.User;
+import com.mybox.application.domain.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +16,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 
 @Component
-public class JWTUtil {
+public class JwtUtil {
 
 	@Value("${springbootwebfluxjjwt.jjwt.secret}")
 	private String secret;
@@ -66,5 +66,4 @@ public class JWTUtil {
 	public Boolean validateToken(String token) {
 		return !isTokenExpired(token);
 	}
-
 }
