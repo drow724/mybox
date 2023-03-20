@@ -8,7 +8,7 @@ import com.mybox.application.domain.File;
 import lombok.Getter;
 
 @Getter
-@Document(collection = "file")
+@Document(collection = "files")
 public class FileEntity {
 
 	@Id
@@ -25,6 +25,6 @@ public class FileEntity {
 	}
 
 	public File toDomain() {
-		return new File(id, name);
+		return new File(name);
 	}
 }

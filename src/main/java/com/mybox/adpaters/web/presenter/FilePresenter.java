@@ -2,22 +2,25 @@ package com.mybox.adpaters.web.presenter;
 
 import com.mybox.application.domain.File;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class FilePresenter {
 
-	private String id;
-
-	private final String name;
+	private String name;
 
 	public File toDomain() {
-		return new File(id, name);
+		return new File(name);
 	}
 
 	public static FilePresenter fromDomain(File file) {
-		return new FilePresenter(file.getId(), file.getName());
+		return new FilePresenter(file.getName());
 	}
+	
+	public FilePresenter(String name) {
+		this.name = name;
+	}
+	
 }

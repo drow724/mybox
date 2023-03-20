@@ -16,6 +16,6 @@ public class FileService implements FileManagementUseCase {
 	private final FilePort filePort;
 	
 	public Mono<File> saveFile(File file) {
-		return null;
+		return filePort.saveFile(file);
 	}
 }

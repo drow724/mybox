@@ -1,7 +1,12 @@
 package com.mybox.application.ports.out;
 
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
+import com.mybox.application.domain.User;
 
-public interface UserPort extends ServerSecurityContextRepository {
+import reactor.core.publisher.Mono;
+
+public interface UserPort {
+	Mono<User> join(User user);
+
+	Mono<User> login(User user);
 
 }
