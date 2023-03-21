@@ -1,10 +1,9 @@
 package com.mybox.adpaters.persistance;
 
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.mybox.adpaters.persistance.entity.TokenEntity;
 import com.mybox.adpaters.persistance.entity.UserEntity;
-import com.mybox.adpaters.persistance.repository.TokenRepository;
 import com.mybox.adpaters.persistance.repository.UserRepository;
 import com.mybox.application.domain.User;
 import com.mybox.application.ports.out.UserPort;
@@ -17,8 +16,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserManagementDBAdapter implements UserPort {
 
-	private final TokenRepository tokenRepository;
-
+	private final ReactiveRedisTemplate<String, User> template;
+	
 	private final UserRepository userRepository;
 
 	private final JwtProvider jwtProvider;
@@ -36,7 +35,8 @@ public class UserManagementDBAdapter implements UserPort {
 				.doOnNext(u -> {
 					String access = jwtProvider.generateToken(u);
 					String refresh = jwtProvider.generateRefreshToken(u);
-					tokenRepository.save(new TokenEntity(refresh, u));
+					//template.save(new TokenEntity(refresh, u));
+					template.opsForValue().set(refresh, u).then();
 					u.token(access, refresh);
 				});
 

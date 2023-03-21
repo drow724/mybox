@@ -19,9 +19,17 @@ public class FolderHandler {
 	private final FolderManagementUseCase useCase;
 
 	public Mono<ServerResponse> mkdir(ServerRequest request) {
-		return request.bodyToMono(FolderPresenter.class).flatMap(
-				folderPresenter -> ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(
-						useCase.mkdir(folderPresenter.toDomain()).map(FolderPresenter::fromDomain), FolderPresenter.class));
+		return request.bodyToMono(FolderPresenter.class)
+				.flatMap(folderPresenter -> ServerResponse.status(HttpStatus.CREATED)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(useCase
+								.mkdir(folderPresenter.toDomain(request.principal().map(p -> p.getName()).toString()))
+								.map(FolderPresenter::fromDomain), FolderPresenter.class));
 	}
 
+	public Mono<ServerResponse> ls(ServerRequest request) {
+		return ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON)
+				.body(useCase.ls(request.pathVariable("parentId"), request.principal().map(p -> p.getName()).toString())
+						.map(FolderPresenter::fromDomain), FolderPresenter.class);
+	}
 }

@@ -11,11 +11,14 @@ public class Folder {
 	
 	private String name;
 
+	private String username;
+	
 	private String parentId;
 	
-	public Folder(String id, String name, String parentId) {
+	public Folder(String id, String name, String username, String parentId) {
 		this.id = id;
 		this.name = name;
+		this.username = username;
 		this.parentId = parentId;
 	}
 }

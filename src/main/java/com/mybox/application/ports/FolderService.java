@@ -7,6 +7,7 @@ import com.mybox.application.ports.in.FolderManagementUseCase;
 import com.mybox.application.ports.out.FolderPort;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -18,6 +19,11 @@ public class FolderService implements FolderManagementUseCase {
 	@Override
 	public Mono<Folder> mkdir(Folder folder) {
 		return folderPort.mkdir(folder);
+	}
+
+	@Override
+	public Flux<Folder> ls(String parentId, String username) {
+		return folderPort.ls(parentId, username);
 	}
 
 }

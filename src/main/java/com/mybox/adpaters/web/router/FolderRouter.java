@@ -1,5 +1,6 @@
 package com.mybox.adpaters.web.router;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -19,8 +20,12 @@ import lombok.RequiredArgsConstructor;
 public class FolderRouter {
 
 	@Bean
-	public RouterFunction<ServerResponse> joinRoutes(FolderHandler handler) {
+	public RouterFunction<ServerResponse> mkdirRoutes(FolderHandler handler) {
 		return route(POST("/folder").and(accept(MediaType.APPLICATION_JSON)), handler::mkdir);
 	}
 
+	@Bean
+	public RouterFunction<ServerResponse> ls(FolderHandler handler) {
+		return route(GET("/folder/{depth}").and(accept(MediaType.APPLICATION_JSON)), handler::ls);
+	}
 }
