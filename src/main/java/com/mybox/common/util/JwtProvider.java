@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.mybox.application.domain.User;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -35,16 +36,8 @@ public class JwtProvider {
 		this.key = Keys.hmacShaKeyFor(secret.getBytes());
 	}
 
-	public Claims getAllClaimsFromToken(String token) {
-		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-	}
-
 	public String getUsernameFromToken(String token) {
 		return getAllClaimsFromToken(token).getSubject();
-	}
-
-	public Date getExpirationDateFromToken(String token) {
-		return getAllClaimsFromToken(token).getExpiration();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,11 +52,6 @@ public class JwtProvider {
 	public User getUser(String token) {
 		User user = getAllClaimsFromToken(token).get("user", User.class);
 		return user;
-	}
-
-	private Boolean isTokenExpired(String token) {
-		final Date expiration = getExpirationDateFromToken(token);
-		return expiration.before(new Date());
 	}
 
 	public String generateToken(User user) {
@@ -87,7 +75,16 @@ public class JwtProvider {
 	}
 
 	public Boolean validateToken(String token) {
-		return !isTokenExpired(token);
+		Boolean expiration = Boolean.FALSE;
+		try {
+			expiration = !getAllClaimsFromToken(token).getExpiration().before(new Date());
+		} catch(ExpiredJwtException e) {
+			return false;
+		}
+		return expiration;
 	}
 
+	private Claims getAllClaimsFromToken(String token) {
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+	}
 }

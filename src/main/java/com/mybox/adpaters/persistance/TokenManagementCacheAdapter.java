@@ -22,8 +22,14 @@ public class TokenManagementCacheAdapter implements TokenPort {
 	public Mono<Token> refresh(Token token) {
 		return Mono.just(token).filter(t -> jwtProvider.validateToken(t.getRefreshToken()))
 				.map(t -> tokenRepository.findById(t.getRefreshToken())).filter(op -> op.isPresent())
-				.map(op -> op.get()).filter(t -> !jwtProvider.validateToken(t.getUser().getToken().getAccessToken()))
-				.map(t -> new Token(jwtProvider.generateToken(t.getUser()), t.getRefreshToken()));
-
+				.map(op -> op.get())
+				.map(t -> {
+					if(!jwtProvider.validateToken(t.getUser().getToken().getAccessToken())) {
+						tokenRepository.delete(t);
+						return null;
+					}
+					return new Token(jwtProvider.generateToken(t.getUser()), t.getRefreshToken());
+				});
+				
 	}
 }

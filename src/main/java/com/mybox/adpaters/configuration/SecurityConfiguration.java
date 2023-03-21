@@ -38,11 +38,8 @@ public class SecurityConfiguration {
 		return new ReactiveAuthenticationManager() {
 			@Override
 			public Mono<Authentication> authenticate(Authentication authentication) {
-				return Mono.just(authentication)
-						.filter(auth -> jwtProvider.validateToken(auth.getCredentials().toString()))
-						.filter(auth -> auth.getAuthorities().size() != 0)
-						.map(auth -> UsernamePasswordAuthenticationToken.authenticated(auth.getPrincipal(),
-								auth.getCredentials(), auth.getAuthorities()));
+				return Mono.just(UsernamePasswordAuthenticationToken.authenticated(authentication.getPrincipal(),
+						authentication.getCredentials(), authentication.getAuthorities()));
 			}
 		};
 	}
@@ -59,11 +56,10 @@ public class SecurityConfiguration {
 			@Override
 			public Mono<SecurityContext> load(ServerWebExchange exchange) {
 				return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
-						.filter(header -> header.startsWith("Bearer ")).flatMap(header -> {
-							String accesstoken = header.substring(7);
-							String username = jwtProvider.getUsernameFromToken(accesstoken);
-							List<GrantedAuthority> roles = jwtProvider.getRoles(accesstoken);
-							Authentication auth = new UsernamePasswordAuthenticationToken(username, accesstoken, roles);
+						.filter(header -> header.startsWith("Bearer ")).map(header -> header.substring(7)).filter(header -> jwtProvider.validateToken(header)).flatMap(header -> {
+							String username = jwtProvider.getUsernameFromToken(header);
+							List<GrantedAuthority> roles = jwtProvider.getRoles(header);
+							Authentication auth = new UsernamePasswordAuthenticationToken(username, header, roles);
 							return reactiveAuthenticationManager().authenticate(auth).map(SecurityContextImpl::new);
 						});
 			}

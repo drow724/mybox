@@ -36,7 +36,7 @@ public class UserManagementDBAdapter implements UserPort {
 				.doOnNext(u -> {
 					String access = jwtProvider.generateToken(u);
 					String refresh = jwtProvider.generateRefreshToken(u);
-					TokenEntity s = tokenRepository.save(new TokenEntity(refresh, u));
+					tokenRepository.save(new TokenEntity(refresh, u));
 					u.token(access, refresh);
 				});
 
