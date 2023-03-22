@@ -9,4 +9,6 @@ public interface FilePort {
 	Mono<File> saveFile(File file);
 
 	Flux<File> findByParentId(String parentId, String username);
+
+	Mono<byte[]> getFile(String id);
 }

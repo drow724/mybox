@@ -1,5 +1,6 @@
 package com.mybox.adpaters.web.router;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -16,7 +17,12 @@ import com.mybox.adpaters.web.handler.FileHandler;
 public class FileRouter {
 
 	@Bean
-	public RouterFunction<ServerResponse> fileRoutes(FileHandler handler) {
+	public RouterFunction<ServerResponse> saveFileRoute(FileHandler handler) {
 		return route(POST("/file").and(accept(MediaType.APPLICATION_JSON)), handler::saveFile);
+	}
+	
+	@Bean
+	public RouterFunction<ServerResponse> getFileRoute(FileHandler handler) {
+		return route(GET("/file/{id}").and(accept(MediaType.APPLICATION_JSON)), handler::getFile);
 	}
 }

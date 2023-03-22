@@ -17,8 +17,10 @@ public class FilePresenter {
 	
 	private String parentId;
 	
+	private byte[] file;
+	
 	public File toDomain() {
-		return new File(id, name, username, parentId);
+		return new File(id, name, username, parentId, file);
 	}
 
 	public static FilePresenter fromDomain(File file) {

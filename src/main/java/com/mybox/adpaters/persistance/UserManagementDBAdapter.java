@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.mybox.adpaters.persistance.entity.UserEntity;
 import com.mybox.adpaters.persistance.repository.UserRepository;
 import com.mybox.application.domain.Folder;
+import com.mybox.application.domain.Storage;
 import com.mybox.application.domain.User;
 import com.mybox.application.ports.out.UserPort;
 import com.mybox.common.util.JwtProvider;
@@ -21,6 +22,8 @@ public class UserManagementDBAdapter implements UserPort {
 
 	private final UserRepository userRepository;
 
+	private final StorageManagementDBAdapter storageManagementDBAdapter;
+
 	private final FolderManagementDBAdapter folderManagementDBAdapter;
 
 	private final JwtProvider jwtProvider;
@@ -29,7 +32,9 @@ public class UserManagementDBAdapter implements UserPort {
 	public Mono<User> join(User user) {
 		return userRepository.findByUsername(user.getUsername()).map(UserEntity::toDomain)
 				.switchIfEmpty(userRepository.save(UserEntity.fromDomain(user)).map(UserEntity::toDomain))
-				.flatMap(u -> folderManagementDBAdapter.mkdir(new Folder("/", u.getUsername(), "root")).thenReturn(u));
+				.flatMap(u -> folderManagementDBAdapter.mkdir(new Folder("/", u.getUsername(), "root")).thenReturn(u))
+				.flatMap(u -> storageManagementDBAdapter.saveStorage(new Storage(u.getUsername(), u.getRank()))
+						.thenReturn(u));
 	}
 
 	@Override
