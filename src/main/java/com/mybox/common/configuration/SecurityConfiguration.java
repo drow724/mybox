@@ -1,4 +1,4 @@
-package com.mybox.adpaters.configuration;
+package com.mybox.common.configuration;
 
 import java.util.List;
 

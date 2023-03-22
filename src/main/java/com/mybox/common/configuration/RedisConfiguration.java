@@ -15,6 +15,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import com.mybox.application.domain.File;
 import com.mybox.application.domain.Folder;
+import com.mybox.application.domain.Storage;
 import com.mybox.application.domain.User;
 
 import jakarta.annotation.PostConstruct;
@@ -79,6 +80,20 @@ public class RedisConfiguration {
                 RedisSerializationContext.newSerializationContext(new StringRedisSerializer());
 
         RedisSerializationContext<String, File> context = builder.value(serializer)
+                .build();
+
+        return new ReactiveRedisTemplate<>(factory, context);
+    }
+	
+	@Bean
+    public ReactiveRedisTemplate<String, Storage> reactiveStorageRedisTemplate(ReactiveRedisConnectionFactory factory) {
+
+        Jackson2JsonRedisSerializer<Storage> serializer = new Jackson2JsonRedisSerializer<>(Storage.class);
+
+        RedisSerializationContext.RedisSerializationContextBuilder<String, Storage> builder =
+                RedisSerializationContext.newSerializationContext(new StringRedisSerializer());
+
+        RedisSerializationContext<String, Storage> context = builder.value(serializer)
                 .build();
 
         return new ReactiveRedisTemplate<>(factory, context);

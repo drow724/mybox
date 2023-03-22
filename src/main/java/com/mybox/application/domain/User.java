@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mybox.application.domain.constant.Rank;
 import com.mybox.application.domain.constant.Role;
 
 import lombok.AllArgsConstructor;
@@ -25,6 +26,9 @@ public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter
+    private String id;
+    
     private String username;
 
     private String password;
@@ -37,6 +41,9 @@ public class User implements UserDetails {
     
     @Getter
     private Token token;
+    
+    @Getter
+    private Rank rank;
     
     @Override
     public String getUsername() {
@@ -88,15 +95,24 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 	
+	public User(String id, String username, String password, Boolean enabled, List<Role> roles, Rank rank) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.roles = roles;
+		this.rank = rank;
+	}
+
+	public void token(String accessToken, String refreshToken) {
+		this.token = new Token(accessToken, refreshToken);
+	}
+
 	public User(String username, String password, Boolean enabled, List<Role> roles) {
 		this.username = username;
 		this.password = password;
 		this.enabled = enabled;
 		this.roles = roles;
-	}
-
-	public void token(String accessToken, String refreshToken) {
-		this.token = new Token(accessToken, refreshToken);
 	}
 
 }

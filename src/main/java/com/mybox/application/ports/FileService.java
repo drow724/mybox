@@ -24,4 +24,9 @@ public class FileService implements FileManagementUseCase {
 	public Flux<File> findByParentId(String parentId, String username) {
 		return filePort.findByParentId(parentId, username);
 	}
+
+	@Override
+	public Mono<byte[]> getFile(String id) {
+		return filePort.getFile(id);
+	}
 }
