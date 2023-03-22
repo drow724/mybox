@@ -1,7 +1,5 @@
 package com.mybox.adpaters.persistance;
 
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.ReactiveListOperations;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -25,13 +23,13 @@ public class FolderManagementDBAdapter implements FolderPort {
 	@Override
 	public Mono<Folder> mkdir(Folder folder) {
 		return folderRepository.save(FolderEntity.fromDomain(folder)).map(FolderEntity::toDomain)
-				.doOnNext(f -> template.opsForValue().set(f.getParentId()+f.getUsername(), f));
+				.flatMap(f -> template.opsForSet().add("folder" + f.getParentId() + f.getUsername(), f).thenReturn(f));
 	}
 
 	@Override
 	public Flux<Folder> ls(String parentId, String username) {
-		ReactiveListOperations<String, Folder> ops = template.opsForList();
-		return ops.size(username + parentId).flatMapMany(size -> ops.range(parentId + username, 0, size));
+		return template.opsForSet().members("folder" + parentId + username)
+				.switchIfEmpty(folderRepository.findByparentIdAndUsername(parentId, username));
 	}
 
 }

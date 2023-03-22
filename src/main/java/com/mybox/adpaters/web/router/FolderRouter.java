@@ -26,6 +26,6 @@ public class FolderRouter {
 
 	@Bean
 	public RouterFunction<ServerResponse> ls(FolderHandler handler) {
-		return route(GET("/folder/{depth}").and(accept(MediaType.APPLICATION_JSON)), handler::ls);
+		return route(GET("/folder/{parentId}").and(accept(MediaType.APPLICATION_JSON)), handler::ls);
 	}
 }

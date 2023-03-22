@@ -1,25 +1,28 @@
-package com.mybox.application.domain;
+package com.mybox.adpaters.web.presenter;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Folder {
+public class ListPresenter {
 
 	private String id;
-	
+
 	private String name;
 
 	private String username;
-	
+
 	private String parentId;
-	
-	public Folder(String name, String username, String parentId) {
+
+	private String type;
+
+	public ListPresenter(String id, String name, String username, String parentId, String type) {
+		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.parentId = parentId;
+		this.type = type;
 	}
+
 }

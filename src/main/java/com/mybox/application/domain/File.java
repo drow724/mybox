@@ -7,9 +7,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class File {
 
-	private String name;
+	private String id;
 	
-	public File(String name) {
+	private String name;
+
+	private String username;
+	
+	private String parentId;
+	
+	public File(String name, String username, String parentId) {
 		this.name = name;
+		this.username = username;
+		this.parentId = parentId;
 	}
 }

@@ -22,7 +22,7 @@ public class JoinPresenter {
 
     @Getter @Setter
     private Boolean enabled = Boolean.TRUE;
-
+    
     @Getter @Setter
     private List<Role> roles;
 
