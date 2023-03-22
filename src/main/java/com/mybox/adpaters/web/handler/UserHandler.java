@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.mybox.adpaters.web.presenter.user.JoinPresenter;
 import com.mybox.adpaters.web.presenter.user.LoginPresenter;
-import com.mybox.adpaters.web.presenter.user.TokenPresenter;
 import com.mybox.application.ports.in.UserManagementUseCase;
 
 import lombok.RequiredArgsConstructor;

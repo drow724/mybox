@@ -1,7 +1,5 @@
 package com.mybox.application.domain;
 
-import com.mybox.adpaters.persistance.entity.TokenEntity;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

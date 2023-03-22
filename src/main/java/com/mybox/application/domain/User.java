@@ -2,7 +2,6 @@ package com.mybox.application.domain;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -35,7 +34,7 @@ public class User implements UserDetails {
 
     @Getter @Setter
     private List<Role> roles;
-
+    
     @Getter
     private Token token;
     
@@ -88,7 +87,7 @@ public class User implements UserDetails {
 		this.username = username;
 		this.password = password;
 	}
-
+	
 	public User(String username, String password, Boolean enabled, List<Role> roles) {
 		this.username = username;
 		this.password = password;

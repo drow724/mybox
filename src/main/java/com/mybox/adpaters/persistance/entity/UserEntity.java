@@ -2,6 +2,7 @@ package com.mybox.adpaters.persistance.entity;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mybox.application.domain.User;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserEntity {
 
+	@Id
 	private String id;
 	
 	private String username;
@@ -24,7 +26,7 @@ public class UserEntity {
     private String password;
 
     private Boolean enabled;
-
+    
     private List<Role> roles;
     
     public UserEntity(String username, String password, Boolean enabled, List<Role> roles) {

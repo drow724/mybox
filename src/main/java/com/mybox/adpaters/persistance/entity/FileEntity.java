@@ -16,15 +16,21 @@ public class FileEntity {
 
 	private String name;
 
-	public FileEntity(String name) {
+	private String username;
+	
+	private String parentId;
+
+	public FileEntity(String name, String username, String parentId) {
 		this.name = name;
+		this.username = username;
+		this.parentId = parentId;
 	}
 
 	public static FileEntity fromDomain(File file) {
-		return new FileEntity(file.getName());
+		return new FileEntity(file.getName(), file.getUsername(), file.getParentId());
 	}
 
 	public File toDomain() {
-		return new File(name);
+		return new File(id, name, username, parentId);
 	}
 }

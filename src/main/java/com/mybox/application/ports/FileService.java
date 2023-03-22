@@ -7,6 +7,7 @@ import com.mybox.application.ports.in.FileManagementUseCase;
 import com.mybox.application.ports.out.FilePort;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -17,5 +18,10 @@ public class FileService implements FileManagementUseCase {
 	
 	public Mono<File> saveFile(File file) {
 		return filePort.saveFile(file);
+	}
+
+	@Override
+	public Flux<File> findByParentId(String parentId, String username) {
+		return filePort.findByParentId(parentId, username);
 	}
 }
