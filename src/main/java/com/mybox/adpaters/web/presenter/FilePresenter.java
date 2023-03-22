@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FilePresenter {
 
+	private String id;
+	
 	private String name;
 
 	private String username;
@@ -16,14 +18,15 @@ public class FilePresenter {
 	private String parentId;
 	
 	public File toDomain() {
-		return new File(name, username, parentId);
+		return new File(id, name, username, parentId);
 	}
 
 	public static FilePresenter fromDomain(File file) {
-		return new FilePresenter(file.getName(), file.getUsername(), file.getParentId());
+		return new FilePresenter(file.getId(), file.getName(), file.getUsername(), file.getParentId());
 	}
 	
-	public FilePresenter(String name, String username, String parentId) {
+	public FilePresenter(String id, String name, String username, String parentId) {
+		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.parentId = parentId;

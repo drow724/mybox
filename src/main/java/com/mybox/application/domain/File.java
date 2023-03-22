@@ -15,7 +15,8 @@ public class File {
 	
 	private String parentId;
 	
-	public File(String name, String username, String parentId) {
+	public File(String id, String name, String username, String parentId) {
+		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.parentId = parentId;

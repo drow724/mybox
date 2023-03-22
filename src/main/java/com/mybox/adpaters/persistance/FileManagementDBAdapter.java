@@ -29,7 +29,7 @@ public class FileManagementDBAdapter implements FilePort {
 	@Override
 	public Flux<File> findByParentId(String parentId, String username) {
 		return template.opsForSet().members("file" + parentId + username)
-				.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username));
+				.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain));
 	}
 
 }

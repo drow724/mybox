@@ -31,6 +31,6 @@ public class FileEntity {
 	}
 
 	public File toDomain() {
-		return new File(name, username, parentId);
+		return new File(id, name, username, parentId);
 	}
 }
