@@ -9,4 +9,5 @@ public enum Rank {
     NORMAL(31457280L);
 
 	private final Long all;
+
 }

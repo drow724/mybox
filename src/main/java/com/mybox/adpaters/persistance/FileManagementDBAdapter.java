@@ -37,35 +37,35 @@ public class FileManagementDBAdapter implements FilePort {
 
 	private final FileRepository fileRepository;
 
-	private final StorageManagementDBAdapter storageManagementDBAdapter;
+	private final UserManagementDBAdapter userManagementDBAdapter;
 
-	private final ReactiveRedisTemplate<String, File> template;
+	private final ReactiveRedisTemplate<String, File> fileTemplate;
 
 	@Override
 	public Mono<File> saveFile(File file) {
-		return storageManagementDBAdapter.valid(file.getUsername(), file.getFile().length).filter(b -> b)
-				.flatMap(b -> fileRepository.save(FileEntity.fromDomain(file)).map(FileEntity::toDomain).flatMap(
-						f -> template.opsForSet().add("file" + f.getParentId() + f.getUsername(), f).thenReturn(f))
-						.map(f -> {
-							ObjectMetadata objectMetaData = new ObjectMetadata();
-							objectMetaData.setContentType(f.getName().split("\\.")[1]);
-							objectMetaData.setContentLength(file.getFile().length);
+		return Mono.just(file)
+				.flatMap(f -> userManagementDBAdapter.valid(f.getUsername(), f.getFile().length).thenReturn(f))
+				.flatMap(f -> fileRepository.save(FileEntity.fromDomain(file)).map(FileEntity::toDomain))
+				.flatMap(f -> fileTemplate.opsForSet().add("file" + f.getParentId() + f.getUsername(), f).thenReturn(f))
+				.map(f -> {
+					ObjectMetadata objectMetaData = new ObjectMetadata();
+					objectMetaData.setContentType(file.getName().split("\\.")[1]);
+					objectMetaData.setContentLength(file.getFile().length);
 
-							try (InputStream inputStream = new ByteArrayInputStream(file.getFile())) {
-								amazonS3Client
-										.putObject(new PutObjectRequest(bucket, f.getId(), inputStream, objectMetaData)
-												.withCannedAcl(CannedAccessControlList.PublicRead));
-							} catch (IOException e) {
-								throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-							}
-							return f;
-						}));
+					try (InputStream inputStream = new ByteArrayInputStream(file.getFile())) {
+						amazonS3Client.putObject(new PutObjectRequest(bucket, f.getId(), inputStream, objectMetaData)
+								.withCannedAcl(CannedAccessControlList.PublicRead));
+					} catch (IOException e) {
+						throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+					}
+					return file;
+				});
 
 	}
 
 	@Override
 	public Flux<File> findByParentId(String parentId, String username) {
-		return template.opsForSet().members("file" + parentId + username)
+		return fileTemplate.opsForSet().members("file" + parentId + username)
 				.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain));
 	}
 
