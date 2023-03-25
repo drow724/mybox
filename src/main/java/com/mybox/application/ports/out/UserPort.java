@@ -8,5 +8,9 @@ public interface UserPort {
 	Mono<User> join(User user);
 
 	Mono<User> login(User user);
+	
+	Mono<User> valid(String username, int length);
+
+	Mono<Integer> minusCurrent(String username, int length);
 
 }

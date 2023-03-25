@@ -36,14 +36,17 @@ public class User implements UserDetails {
     @Getter @Setter
     private Boolean enabled;
 
+    @Getter
+    private Rank rank = Rank.NORMAL;
+    
+    @Getter
+    private Long current = 0L;
+    
     @Getter @Setter
     private List<Role> roles;
     
     @Getter
     private Token token;
-    
-    @Getter
-    private Rank rank;
     
     @Override
     public String getUsername() {
@@ -94,15 +97,6 @@ public class User implements UserDetails {
 		this.username = username;
 		this.password = password;
 	}
-	
-	public User(String id, String username, String password, Boolean enabled, List<Role> roles, Rank rank) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-		this.roles = roles;
-		this.rank = rank;
-	}
 
 	public void token(String accessToken, String refreshToken) {
 		this.token = new Token(accessToken, refreshToken);
@@ -113,6 +107,17 @@ public class User implements UserDetails {
 		this.password = password;
 		this.enabled = enabled;
 		this.roles = roles;
+	}
+
+	public User(String id, String username, String password, Boolean enabled, List<Role> roles, Rank rank,
+			Long current) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.roles = roles;
+		this.rank = rank;
+		this.current = current;
 	}
 
 }

@@ -29,4 +29,9 @@ public class FileService implements FileManagementUseCase {
 	public Mono<byte[]> getFile(String id) {
 		return filePort.getFile(id);
 	}
+
+	@Override
+	public Mono<File> deleteFile(String id, String username) {
+		return filePort.deleteFile(id, username);
+	}
 }
