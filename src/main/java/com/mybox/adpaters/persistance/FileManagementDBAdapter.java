@@ -22,6 +22,7 @@ import com.mybox.adpaters.persistance.repository.FileRepository;
 import com.mybox.application.domain.File;
 import com.mybox.application.ports.out.FilePort;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -67,6 +68,24 @@ public class FileManagementDBAdapter implements FilePort {
 	public Flux<File> findByParentId(String parentId, String username) {
 		return fileTemplate.opsForSet().members("file" + parentId + username)
 				.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain));
+	}
+
+	@Override
+	public Mono<File> deleteFile(String id, String username) {
+		return fileRepository.findById(id).flatMap(file -> fileRepository.delete(file).thenReturn(file))
+				.flatMap(file -> fileTemplate.opsForSet().pop("file" + file.getParentId() + file.getUsername())
+						.filter(data -> !data.getId().equals(file.getId())).flatMap(data -> {
+							System.out.println(data.getId());
+							return fileTemplate.opsForSet().add("file" + file.getParentId() + file.getUsername(), data)
+									.thenReturn(data);
+						}).thenReturn(file))
+				.flatMap(file -> getFile(file.getId())
+						.flatMap(bytes -> userManagementDBAdapter.minusCurrent(username, bytes.length))
+						.thenReturn(file))
+				.flatMap(file -> {
+					amazonS3Client.deleteObject(bucket, file.getId());
+					return Mono.just(file.toDomain());
+				});
 	}
 
 	@Override

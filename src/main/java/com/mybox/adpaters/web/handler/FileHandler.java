@@ -25,9 +25,13 @@ public class FileHandler {
 	}
 
 	public Mono<ServerResponse> getFile(ServerRequest request) {
-		return ServerResponse.status(HttpStatus.OK)
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(useCase.getFile(request.pathVariable("id")),
-						byte[].class);
+		return ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+				.body(useCase.getFile(request.pathVariable("id")), byte[].class);
+	}
+
+	public Mono<ServerResponse> deleteFile(ServerRequest request) {
+		return request.principal()
+				.flatMap(p -> ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+						.body(useCase.deleteFile(request.pathVariable("id"), p.getName()), FilePresenter.class));
 	}
 }

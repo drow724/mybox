@@ -11,4 +11,6 @@ public interface FilePort {
 	Flux<File> findByParentId(String parentId, String username);
 
 	Mono<byte[]> getFile(String id);
+
+	Mono<File> deleteFile(String id, String username);
 }

@@ -1,5 +1,6 @@
 package com.mybox.adpaters.web.router;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
@@ -24,5 +25,10 @@ public class FileRouter {
 	@Bean
 	public RouterFunction<ServerResponse> getFileRoute(FileHandler handler) {
 		return route(GET("/file/{id}").and(accept(MediaType.APPLICATION_JSON)), handler::getFile);
+	}
+	
+	@Bean
+	public RouterFunction<ServerResponse> deleteFileRoute(FileHandler handler) {
+		return route(DELETE("/file/{id}").and(accept(MediaType.APPLICATION_JSON)), handler::deleteFile);
 	}
 }
