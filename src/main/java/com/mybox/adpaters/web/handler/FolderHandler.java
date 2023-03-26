@@ -24,25 +24,22 @@ public class FolderHandler {
 
 	public Mono<ServerResponse> mkdir(ServerRequest request) {
 		return request.bodyToMono(FolderPresenter.class)
-				.flatMap(folderPresenter -> ServerResponse.status(HttpStatus.CREATED)
-						.contentType(MediaType.APPLICATION_JSON)
-						.body(folderUseCase.mkdir(folderPresenter.toDomain(folderPresenter.getUsername()))
-								.map(FolderPresenter::fromDomain), FolderPresenter.class));
+				.flatMap(folderPresenter -> folderUseCase.mkdir(folderPresenter.toDomain()))
+				.flatMap(folder -> folder.getId() != null
+						? ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+								.body(Mono.just(folder), FolderPresenter.class)
+						: ServerResponse.status(HttpStatus.BAD_REQUEST).build());
 	}
 
 	public Mono<ServerResponse> ls(ServerRequest request) {
-		return request.principal().flatMap(p -> {
-			return ServerResponse
-					.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(
-							folderUseCase.ls(request.pathVariable("parentId"), p.getName())
-									.map(f -> new ListPresenter(f.getId(), f.getName(), f.getUsername(),
-											f.getParentId(), "folder"))
-									.mergeWith(
-											fileUseCase.findByParentId(request.pathVariable("parentId"), p.getName())
-													.map(f -> new ListPresenter(f.getId(), f.getName(), f.getUsername(),
-															f.getParentId(), "file")))
-									,
-							ListPresenter.class);
-		});
+		return request.principal()
+				.flatMap(p -> ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(
+						folderUseCase.ls(request.pathVariable("parentId"), p.getName())
+								.map(f -> new ListPresenter(f.getId(), f.getName(), f.getUsername(), f.getParentId(),
+										"folder"))
+								.mergeWith(fileUseCase.findByParentId(request.pathVariable("parentId"), p.getName())
+										.map(f -> new ListPresenter(f.getId(), f.getName(), f.getUsername(),
+												f.getParentId(), "file"))),
+						ListPresenter.class));
 	}
 }

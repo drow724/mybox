@@ -60,7 +60,7 @@ public class UserEntity {
 		current += length;
 	}
 
-	public void minusCurrent(int length) {
+	public void minusCurrent(Long length) {
 		current -= length;
 	}
 }

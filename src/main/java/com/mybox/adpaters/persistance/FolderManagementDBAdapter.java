@@ -22,14 +22,16 @@ public class FolderManagementDBAdapter implements FolderPort {
 
 	@Override
 	public Mono<Folder> mkdir(Folder folder) {
-		return folderRepository.save(FolderEntity.fromDomain(folder)).map(FolderEntity::toDomain)
-				.flatMap(f -> template.opsForSet().add("folder" + f.getParentId() + f.getUsername(), f).thenReturn(f));
+		return folderRepository.findByParentIdAndName(folder.getParentId(), folder.getName()).map(f -> new Folder())
+				.switchIfEmpty(folderRepository.save(FolderEntity.fromDomain(folder)).map(FolderEntity::toDomain)
+						.flatMap(f -> template.opsForSet().add("folder" + f.getParentId() + f.getUsername(), f)
+								.thenReturn(f)));
 	}
 
 	@Override
 	public Flux<Folder> ls(String parentId, String username) {
 		return template.opsForSet().members("folder" + parentId + username)
-				.switchIfEmpty(folderRepository.findByparentIdAndUsername(parentId, username));
+				.switchIfEmpty(folderRepository.findByparentIdAndUsername(parentId, username).map(f -> f.toDomain()));
 	}
 
 }

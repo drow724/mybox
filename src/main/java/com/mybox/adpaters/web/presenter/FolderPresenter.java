@@ -17,8 +17,8 @@ public class FolderPresenter {
 
 	private String parentId;
 
-	public Folder toDomain(String username) {
-		return new Folder(this.name, username, this.parentId);
+	public Folder toDomain() {
+		return new Folder(name, username, parentId);
 	}
 
 	public static FolderPresenter fromDomain(Folder folder) {
