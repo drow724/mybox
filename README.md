@@ -485,3 +485,52 @@
   "count": 1
 }
 ```
+
+## nGrinder
+
+처음부터 cache를 염두해 두고 코드를 작성하였습니다.
+다만 직접적인 성능향상을 확인해 보기 위해 cache를 사용하기 전 코드와 사용 후 코드를 비교하여 성능 측정을 진행해 보았습니다.
+
+### folder 검색(cache 사용 X)
+```java
+public Flux<Folder> ls(String parentId, String username) {
+	return folderRepository.findByparentIdAndUsername(parentId, username).map(f -> f.toDomain());
+}
+```
+
+### file 검색(cache 사용 X)
+```java
+public Flux<File> findByParentId(String parentId, String username) {
+	return fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain);
+}
+```
+
+### 성능 테스트
+
+![스크린샷 2023-03-26 오후 7 50 51](https://user-images.githubusercontent.com/76800974/227770978-c50ac323-e01a-468d-a4e7-41c43cd8d3b2.png)
+
+### folder 검색(cache 사용)
+```java
+public Flux<Folder> ls(String parentId, String username) {
+	return template.opsForSet().members("folder" + parentId + username)
+			.switchIfEmpty(folderRepository.findByparentIdAndUsername(parentId, username).map(f -> f.toDomain())
+					.flatMap(file -> template.opsForSet()
+							.add("folder" + file.getParentId() + file.getUsername(), file).thenReturn(file)));
+}
+```
+
+### file 검색(cache 사용)
+```java
+public Flux<File> findByParentId(String parentId, String username) {
+	return fileTemplate.opsForSet().members("file" + parentId + username)
+			.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain)
+					.flatMap(file -> fileTemplate.opsForSet().add("file" + file.getParentId() + file.getUsername(), file)
+							.thenReturn(file)));
+}
+```
+
+### 성능 테스트
+
+![스크린샷 2023-03-26 오후 7 51 03](https://user-images.githubusercontent.com/76800974/227771053-97ac5207-bdb0-40b1-8821-efe9d437b9c3.png)
+
+수치 상으로 향상된것을 확인해 볼 수 있었습니다.
