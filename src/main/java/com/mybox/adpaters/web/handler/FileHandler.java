@@ -22,14 +22,14 @@ public class FileHandler {
 		return request.bodyToMono(FilePresenter.class)
 				.flatMap(filePresenter -> useCase.saveFile(filePresenter.toDomain()))
 				.flatMap(f -> f.getId() != null
-						? ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Mono.just(f),
-								FilePresenter.class)
+						? ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON)
+								.body(Mono.just(f), FilePresenter.class)
 						: ServerResponse.status(HttpStatus.BAD_REQUEST).build());
 	}
 
 	public Mono<ServerResponse> getFile(ServerRequest request) {
-		return ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(useCase.getFile(request.pathVariable("id")), byte[].class);
+		return useCase.getFile(request.pathVariable("id")).flatMap(bytes -> ServerResponse.status(HttpStatus.OK)
+				.contentType(MediaType.APPLICATION_JSON).contentLength(bytes.length).body(bytes, byte[].class));
 	}
 
 	public Mono<ServerResponse> deleteFile(ServerRequest request) {

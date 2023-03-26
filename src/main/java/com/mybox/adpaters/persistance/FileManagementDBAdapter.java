@@ -70,7 +70,9 @@ public class FileManagementDBAdapter implements FilePort {
 	@Override
 	public Flux<File> findByParentId(String parentId, String username) {
 		return fileTemplate.opsForSet().members("file" + parentId + username)
-				.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain));
+				.switchIfEmpty(fileRepository.findByParentIdAndUsername(parentId, username).map(FileEntity::toDomain)
+						.flatMap(file -> fileTemplate.opsForSet().add("file" + file.getParentId() + file.getUsername(), file)
+								.thenReturn(file)));
 	}
 
 	@Override
