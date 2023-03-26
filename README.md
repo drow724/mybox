@@ -68,7 +68,7 @@ public Flux<File> findByParentId(String parentId, String username) {
 
 Swagger를 web-flux 스택에서 구현하는데 애를 먹었습니다. 결국 구현하지 못하여 결국 API 문서를 markdown으로 작성하였는데 굉장히 아쉽게 생각합니다.
 
-배민 개발자분께서 refresh token은 access token이 만료되지 않은 시점에서 access token을 재발급 받으려 한다면, 만료시켜야 한다는 이야기를 들어서, 구현해보고 싶었는데 메인 도메인 기능을 구현하는데 시간을 쏟느라 구현해 보지 못하여 아쉽습니다.
+ refresh token은 access token이 만료되지 않은 시점에서 access token을 재발급 받으려 한다면, 만료시켜야 한다는 이야기를 들어서, 구현해보고 싶었는데 메인 도메인 기능을 구현하는데 시간을 쏟느라 구현해 보지 못하여 아쉽습니다.
 
 # 아키텍쳐
 ![무제 drawio](https://user-images.githubusercontent.com/76800974/227771999-549234d5-5676-4e0a-864a-dcf4bc2c527f.png)
