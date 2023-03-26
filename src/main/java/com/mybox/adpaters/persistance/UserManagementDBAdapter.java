@@ -55,7 +55,7 @@ public class UserManagementDBAdapter implements UserPort {
 	public Mono<Integer> minusCurrent(String username, int length) {
 		return userRepository.findByUsername(username)
 				.flatMap(user -> {
-					user.minusCurrent(length);
+					user.minusCurrent(StorageCalculatorUtil.byteToKiloByte(length));
 					return userRepository.save(user).thenReturn(length);
 				});
 	}

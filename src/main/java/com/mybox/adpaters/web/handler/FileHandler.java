@@ -19,9 +19,12 @@ public class FileHandler {
 	private final FileManagementUseCase useCase;
 
 	public Mono<ServerResponse> saveFile(ServerRequest request) {
-		return request.bodyToMono(FilePresenter.class).flatMap(filePresenter -> ServerResponse
-				.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON)
-				.body(useCase.saveFile(filePresenter.toDomain()).map(FilePresenter::fromDomain), FilePresenter.class));
+		return request.bodyToMono(FilePresenter.class)
+				.flatMap(filePresenter -> useCase.saveFile(filePresenter.toDomain()))
+				.flatMap(f -> f.getId() != null
+						? ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Mono.just(f),
+								FilePresenter.class)
+						: ServerResponse.status(HttpStatus.BAD_REQUEST).build());
 	}
 
 	public Mono<ServerResponse> getFile(ServerRequest request) {
