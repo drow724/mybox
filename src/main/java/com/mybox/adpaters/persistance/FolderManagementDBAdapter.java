@@ -31,7 +31,9 @@ public class FolderManagementDBAdapter implements FolderPort {
 	@Override
 	public Flux<Folder> ls(String parentId, String username) {
 		return template.opsForSet().members("folder" + parentId + username)
-				.switchIfEmpty(folderRepository.findByparentIdAndUsername(parentId, username).map(f -> f.toDomain()));
+				.switchIfEmpty(folderRepository.findByparentIdAndUsername(parentId, username).map(f -> f.toDomain())
+						.flatMap(file -> template.opsForSet()
+								.add("folder" + file.getParentId() + file.getUsername(), file).thenReturn(file)));
 	}
 
 }
