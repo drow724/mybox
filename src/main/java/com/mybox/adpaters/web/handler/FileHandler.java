@@ -22,7 +22,7 @@ public class FileHandler {
 		return request.bodyToMono(FilePresenter.class)
 				.flatMap(filePresenter -> useCase.saveFile(filePresenter.toDomain()))
 				.flatMap(f -> f.getId() != null
-						? ServerResponse.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Mono.just(f),
+						? ServerResponse.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(Mono.just(f),
 								FilePresenter.class)
 						: ServerResponse.status(HttpStatus.BAD_REQUEST).build());
 	}

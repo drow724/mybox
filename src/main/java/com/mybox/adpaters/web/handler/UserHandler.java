@@ -27,7 +27,7 @@ public class UserHandler {
 
 	public Mono<ServerResponse> login(ServerRequest request) {
 		return request.bodyToMono(LoginPresenter.class)
-				.flatMap(loginPresenter -> ServerResponse.status(HttpStatus.CREATED)
+				.flatMap(loginPresenter -> ServerResponse.status(HttpStatus.OK)
 						.contentType(MediaType.APPLICATION_JSON)
 						.body(useCase.login(loginPresenter.toDomain()).map(user -> LoginPresenter.fromDomain(user)),
 								LoginPresenter.class));
