@@ -2,6 +2,7 @@ package com.mybox.common.configuration;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
@@ -32,7 +34,10 @@ import reactor.core.publisher.Mono;
 public class SecurityConfiguration {
 
 	private final JwtProvider jwtProvider;
-	
+
+	private static final String[] DOC_URLS = { "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs",
+			"/webjars/**" };
+
 	@Bean
 	public ReactiveAuthenticationManager reactiveAuthenticationManager() {
 		return new ReactiveAuthenticationManager() {
@@ -56,7 +61,8 @@ public class SecurityConfiguration {
 			@Override
 			public Mono<SecurityContext> load(ServerWebExchange exchange) {
 				return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
-						.filter(header -> header.startsWith("Bearer ")).map(header -> header.substring(7)).filter(header -> jwtProvider.validateToken(header)).flatMap(header -> {
+						.filter(header -> header.startsWith("Bearer ")).map(header -> header.substring(7))
+						.filter(header -> jwtProvider.validateToken(header)).flatMap(header -> {
 							String username = jwtProvider.getUsernameFromToken(header);
 							List<GrantedAuthority> roles = jwtProvider.getRoles(header);
 							Authentication auth = new UsernamePasswordAuthenticationToken(username, header, roles);
@@ -79,8 +85,9 @@ public class SecurityConfiguration {
 				.pathMatchers(HttpMethod.OPTIONS).permitAll().pathMatchers("/user/join").permitAll()
 				.pathMatchers(HttpMethod.OPTIONS).permitAll().pathMatchers("/user/login").permitAll()
 				.pathMatchers(HttpMethod.OPTIONS).permitAll().pathMatchers("/token/refresh").permitAll()
-				.anyExchange()
-				.authenticated().and().build();
+				.pathMatchers("/webjars/swagger-ui/**").permitAll().pathMatchers("/swagger-ui/**").permitAll()
+				.pathMatchers("/swagger-resources/**").permitAll()
+				.pathMatchers("/swagger-ui.html").permitAll().anyExchange().authenticated().and().build();
 	}
 
 }
